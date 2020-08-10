@@ -3,7 +3,7 @@ On constate que le binaire lit deux fois sur STDIN, pour demander un username pu
 Le binaire ne demande le password que si le username est correct.
 Il compare le username avec `dat_will` dans la fonction verifiy_user_name, et le programme continue si la comparaison reussit.
 Il compare ensuite le password avec `admin` mais quel que soit le resultat de la comparaison il affiche un message d' erreur.
-On constate que le deuxieme fgets lit 64 bytes alors que le buffer n'en fait que 60, on peut donc exploiter l'overflow pour reecrire la valeur d'eip et injecter un shellcode.
+On constate que le deuxieme fgets lit 100 bytes alors que le buffer n'en fait que 64, on peut donc exploiter l'overflow pour reecrire la valeur d'eip et injecter un shellcode.
 Il faut cependant faire attention a donner un username de 256 caracteres au premier fgets.
 Si le username est plus court, alors notre shellcode (situe en principe dans le password) va se faire absorber par le username.
 Si le username est plus long, il va deborder sur le password et donc decaler notre shellcode.
