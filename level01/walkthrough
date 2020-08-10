@@ -1,0 +1,3 @@
+On disass le binaire.
+On constate que le binaire lit deux fois sur STDIN, pour demander un username puis un password.
+Le binaire ne demande le passwod que si le username est correct.
