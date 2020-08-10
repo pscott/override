@@ -1,0 +1,38 @@
+int main() {
+	char user[112];
+	char flag[48];
+	char pass[112];
+	int fd;
+	int b;
+
+	bzero(??, 12);
+	bzero(??, 12);
+
+	fd = fopen("/home/users/level03/.pass", "r");
+	if (fd != 0) {
+		fwrite("ERROR:failed to open password file\n", 1, 36, STDERR);
+		exit(1);
+	}
+	b = fread(&flag, 1, 41, STDIN)
+	pos = strcspn(&flag, "\n");
+	flag[pos] = 0;
+	if (b == 41) {
+		puts(HEADER);
+		printf("--[ Username: ");
+		fgets(&user, 100, STDIN);
+		pos = strcspn(&user, "\n");
+		user[pos] = 0;
+		printf("--[ Password: ");
+		fgets(&pass, 100, STDIN);
+		pos = strcspn(&pass, "\n");
+		pass[pos] = 0;
+		if (strncmp(flag, pass, 41) == 0) {
+			printf("Grettings, %s!\n", &user);
+			system("/bin/sh");
+			return (0);
+		}
+	} else {
+		fwrite("ERROR:failed to open password file\n", 1, 36, STDERR);
+		exit(1);
+	}
+}
