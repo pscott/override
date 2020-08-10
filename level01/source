@@ -1,0 +1,31 @@
+int verify_user_name(const char *user) {
+	puts("verifying username....\n");
+	return (memcmp(user, "dat_will"));
+}
+
+int verify_user_pass(const char *pass) {
+	return memcmp(pass, "admin");
+}
+
+static user[256];
+
+void main() {
+	char pass[64];
+	int res;
+
+	puts(HEADER);
+	printf("Enter Username: ");
+	bzero(&pass, 16);
+	fgets(&user, 256, STDIN);
+	res = verify_user_name(&user);
+	if (res == 0) {
+		puts("Enter password: ");
+		fgets(&pass, 100, STDIN);
+		res = verify_user_pass(&pass);
+		if (res == 0) {
+			return (0);
+		}
+	}
+	puts("nope, incorrect password...\n");
+	return (1);
+}
