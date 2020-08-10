@@ -1,0 +1,5 @@
+En desassemblant le binaire nous avons pu creer un fichier source qui contient le code initial (reverse engineering).
+Ce code source n'est pas securise car la valeur comparee est ecrite directement dans le binaire (en clair).
+Il est donc facile de la contourner.
+
+`(echo "5276; cat -) | ./level00`
