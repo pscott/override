@@ -23,7 +23,9 @@ void main() {
 		fgets(&pass, 100, STDIN);
 		res = verify_user_pass(&pass);
 		if (res == 0) {
-			return (0);
+			if (res != 0) {
+				return (0);
+			}
 		}
 	}
 	puts("nope, incorrect password...\n");
