@@ -1,0 +1,12 @@
+En desassemblant le binaire on trouve 3 fonctions principales : main, test, et decrypt.
+
+Rapidement nous remarquons que la fonction test regarde si l'argument recupere depuis stdin est a 0x15 (21) ou moins de 0x1337d00d (322424845 en decimal).
+
+
+Si ce test ne passe pas, alors il appelel decrypt(rand). 
+Si ce test passe, alors il left shift notre int de 2, puis appelle decrypt avec notre int.
+
+Il ne nous reste plus qu'a testser les 21 possibilites. La 18eme sera la bonne !
+
+./level03
+322424827
