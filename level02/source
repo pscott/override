@@ -17,6 +17,7 @@ int main() {
 	pos = strcspn(&flag, "\n");
 	flag[pos] = 0;
 	if (b == 41) {
+		fclose(fd);
 		puts(HEADER);
 		printf("--[ Username: ");
 		fgets(&user, 100, STDIN);
@@ -27,9 +28,12 @@ int main() {
 		pos = strcspn(&pass, "\n");
 		pass[pos] = 0;
 		if (strncmp(flag, pass, 41) == 0) {
-			printf("Grettings, %s!\n", &user);
+			printf("Greetings, %s!\n", &user);
 			system("/bin/sh");
 			return (0);
+		} else {
+			printf(user);
+			puts("does not have access");
 		}
 	} else {
 		fwrite("ERROR:failed to open password file\n", 1, 36, STDERR);
