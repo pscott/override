@@ -1,0 +1,43 @@
+#include<stdio.h>
+#include<sys/ptrace.h>
+
+int auth(char *login, uint serial) {
+	int l = strlen(login);
+	int res = 0;
+
+	while l-- {
+		res += ?? // do something with serial
+	}
+	if res == 6229050 {
+		return (0);
+	} else {
+		return (1);
+	}
+}
+
+uint get_unum() {
+	uint a;
+
+	fflush(STDIN);
+	scanf("%u", &a);
+	return a;
+}
+
+int main() {
+	char login[32];
+	uint serial;
+
+
+	fgets(&login, sizeof(login), STDIN);
+	serial = get_unum();
+	if (ptrace(PTRACE_TRACEME, 0, 0, 0) < 0 ) {
+		puts("TAMPERNIG DETECTED");
+		exit(1);
+	}
+
+	if auth(login, serial) == 0 {
+		system("/bin/sh");
+		return (0);
+	} 
+	return (1);
+}

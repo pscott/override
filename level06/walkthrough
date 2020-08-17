@@ -1,0 +1,14 @@
+En essayant de debugger avec gdb on se rend compte que le binaire est protege par un ptrace.
+Un moyen simple de desactiver cette protection (et qui n'est pas bloquee ici) est de remplacer la fonction ptrace par une fonction qui retourne toujours 0!
+
+Le code source se trouve dans les Ressources. Il suffit ensuite de le compiler.
+gcc -m32 -shared /tmp/ptrace.c -o /tmp/ptrace.so
+
+puis de le linker (une fois dans gdb).
+set environment LD_PRELOAD=/tmp/ptrace.so
+
+Ensuite, nous pouvons explorer le code tranquilement. Nous comprenons vite qu'il faut qu'auth retourne 0, et qu'auth retournera 0 si et seulement si `ebp - 0x10 == ebp + 0xc`.
+Nous utilisons AAAAAA (il faut que la longueur du login soit plus grand que 5 pour que le code marche), et un serial de 0.
+Puis nous utilisons AAAAA et un serial de 10.
+En imprimant a chaque fois $ebp + 0xc, nous nous rendons compte qu'il prend la valeur de serial.
+Vu que $ebp - 0x10 vaut 0x005f0c3a, nous comprenont qu'il faut que le serial vaille 6229050. Bingo!
