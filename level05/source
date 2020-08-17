@@ -1,0 +1,8 @@
+int main() {
+	char buf[100];
+
+	fgets(&buf, sizeof(buf), STDIN);
+	strntolower(&buf, 0);
+	printf(buf);
+	exit(0);
+}

