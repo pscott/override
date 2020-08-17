@@ -1,0 +1,34 @@
+int main(int argc, char **argv)
+{
+	int pid;
+	char buff[176];
+	int status;
+	int syscall = 0;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		ptrace (0,0,0,0);
+		puts("Give me some shellcode k");
+		gets(buff);
+	}
+	else
+	{
+		while (syscall != 11)
+		{
+			wait(&status);
+			if (WIFEXITED(status))
+			{
+				puts("child is exiting ...");
+				return (0);
+			}
+			else
+			{
+				syscall = ptrace(3, pid, 44, 0);
+			}
+		}
+		puts("no exec for you");
+		kill(pid, SIGKILL);
+	}
+	return (0);
+}

