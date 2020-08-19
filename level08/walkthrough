@@ -1,0 +1,7 @@
+En testant un peu le comportement du binaire, on constate qu'il semble prendre en argument un fichier dont il fait un backup dans le dossier backups, en nous donnant les droits de lecture.
+On essaye donc de backup le fichier .pass du level09 afin de pouvoir le lire.
+Quand on teste `./level08 ../level09/.pass`, on obtient le message d'erreur suivant :
+"ERROR: Failed to open ./backups/../level09/.pass"
+On essaye donc de creer un dossier level09 a la racine du home et de donner les droits a level09, mais malheureusement a cause des ACL le user level09 ne peut toujours pas creer le fichier de backup.
+On cree alors un symlink entre un fichier tmp a la racine et le .pass, puis on execute `./level08 tmp`.
+Le fichier .pass est alors copie sans problemes dans ./backups/tmp
