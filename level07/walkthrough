@@ -1,0 +1,5 @@
+read index -9
+adresse du buffer : 0xffffd574
+adresse de la GOT : 0x0804a004
+index : -1040108892
+adresse du shellcode : 0xffffd578
