@@ -1,0 +1,21 @@
+On disass le binaire.
+On remarque la presence d'une fonction secret_backdoor qui contient un appel a system.
+On va donc essayer d'exploiter un buffer overflow pour reecrire l'adresse de retour d'une fonction afin d'appeler secret_backdoor.
+On remarque que la structure dans laquelle sont stockes les elements fournis par l'utilisateur est la suivant :
+
+struct level09
+{
+    char message[140];
+    char user[40];
+    int size;
+}
+
+Par ailleurs, dans la fonction set_username, 41 bytes au lieu de 40 sont copies dans la chaine user.
+Le dernier byte va donc overflow et remplacer la size.
+Cette size est ensuite utilisee pour le strncpy de la fonction set_msg.
+Si la size est superieure a 140, alors il y aura egalement un overflow sur le buffer message.
+Si on overflow suffisamment, on va reecrire user, size puis les registres rbp et rsp.
+Il suffit donc d'overflow user avec des "\xff" afin de strncpy au maximum 255 caracteres dans message.
+En ajustant un peu, on obtient le payload suivant qui va appeler la fonction secret_backdoor avec en argument la commande `cat /home/users/end/.pass; `.
+
+python -c 'print "\xff"*41 +"\n" + "B"*72 +"cat /home/users/end/.pass; " + "A"*101 + "\x8c\x48\x55\x55\x55\x55\x00\x00"' > /tmp/bla

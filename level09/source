@@ -1,0 +1,49 @@
+
+struct level09
+{
+    char message[140];
+    char user[40];
+    int size;
+}
+
+void secret_backdoor(char *s)
+{
+    fgets(s, 128, STIND);
+    system(s);
+}
+
+void set_msg(char *msg, int size)
+{
+    char s[1040];
+
+    puts("Msg Unix Dude");
+    fgets(s, 1024, STDIN);
+    strncpy(msg, s, size);
+}
+
+void set_username(char *user)
+{
+    char s[160];
+
+    puts("Enter your username");
+    fgets(s, 128, STDIN);
+    strncpy(user, s, 41);
+    printf("Welcome %s", user);
+}
+
+void handle_msg(void)
+{
+    struct level09 ctx;
+
+    ctx.size = 140;
+    set_username(&(ctx.user));
+    set_msg(&(ctx.message), ctx.size);
+    puts("Msg sent");
+}
+
+int main(void)
+{
+    puts("Welcome to l33t msm");
+    handle_msg();
+    return (0);
+}
