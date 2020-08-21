@@ -1,3 +1,26 @@
+On remarque que le binaire nous permet d'ecrire des valeurs en memoire.
+Il n'est pas possible d'ecrire a des index divisibles par 3, en revanche aucun autre check n'est effectue et on peut donc ecrire en dehors de la zone allouee pour le buffer.
+On peut donc potentiellement reecrire une adresse de retour afin d'appeler des morceaux de code arbitraire.
+On remarque cependant que toutes les adresses de retour des fonctions que l' on pourrait exploiter sont a des index divisibles par 3.
+On decide donc de se rabattre sur la GOT.
+En effet, etant donne que les fonctions sont cote a cote en memoire, on va necessairement en trouver une dont l'index n'est pas divible par 3.
+C'est le cas de la fonction fflush, appelee lorsqu'on demande a read un index.
+Neanmoins, pour pouvoir reecrire l'adresse de fflush dans la GOT, nous avons besoin de connaitre sa position relative au buffer dans lequel le programme nous permet d'ecrire.
+En effet, le programme ne prend pas des adresses absolues mais des index relatifs a l'adresse du buffer.
+En utilisant gdb, on remarque que l'adresse du buffer est stockee sur la stack 36 bytes avant le debut du buffer, donc a l'index -9.
+Il suffit alors d'effectuer un `read -9` pour obtenir l'adresse du buffer.
+On calcule la difference entre cette adresse et celle de fflush dans la got, puis on la divise par 4.
+On a alors l'index auquel nous devons ecrire l'adresse de notre shellcode.
+
+Il faut maintenant stocker notre shellcode sur la stack.
+On ne peut malheureusement pas le stocker dans l'env ni dans les arguments car ils sont tous les deux memset a 0 au debut du programme.
+On va donc etre oblige de le stocker grace a la fonction store dans le buffer prevu.
+Seulement, un index sur trois nous est interdit.
+On peut donc copier notre shellcode par petits bouts de 6 bytes et utiliser les 2 bytes suivants pour jump de 5 a la prochaine adresse disponible, en completant avec des Nop si necessaire.
+L'adresse de notre shellcode sera alors l'adresse du buffer + 4 (puisqu'on ne peut pas ecrire a l'index 0).
+
+cat /tmp/payload.txt - | ./level07
+
 read index -9
 adresse du buffer : 0xffffd574
 adresse de la GOT : 0x0804a004
